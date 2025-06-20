@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3 (Python 3.12.6 on win32)" generated="2025-06-19T10:52:35.306423" rpa="false" schemaversion="5">
+<suite id="s1" name="Test Api Robot" source="D:\mycode\codetest\flask-test\test_api_robot.robot">
+<kw name="创建会话" type="SETUP">
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2025-06-19T10:52:35.684891" level="INFO">Creating Session using : alias=flask, url=http://127.0.0.1:5000, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
+<arg>flask</arg>
+<arg>${BASE_URL}</arg>
+<arg>verify=True</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2025-06-19T10:52:35.681231" elapsed="0.003660"/>
+</kw>
+<status status="PASS" start="2025-06-19T10:52:35.681231" elapsed="0.003660"/>
+</kw>
+<test id="s1-t1" name="测试添加用户" line="12">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-06-19T10:52:35.684891" level="INFO">&amp;{headers} = { Content-Type=application/json }</msg>
+<var>&amp;{headers}</var>
+<arg>Content-Type=${CONTENT_TYPE}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.684891" elapsed="0.000000"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-06-19T10:52:35.684891" level="INFO">&amp;{data} = { name=张三 | age=20 }</msg>
+<var>&amp;{data}</var>
+<arg>name=张三</arg>
+<arg>age=20</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.684891" elapsed="0.000000"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2025-06-19T10:52:35.704082" level="INFO">POST Request : url=http://127.0.0.1:5000/user 
+ path_url=/user 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '37'} 
+ body=b'{"name": "\\u5f20\\u4e09", "age": "20"}' 
+ </msg>
+<msg time="2025-06-19T10:52:35.704082" level="INFO">POST Response : url=http://127.0.0.1:5000/user 
+ status=201, reason=CREATED 
+ headers={'Server': 'Werkzeug/3.1.3 Python/3.12.6', 'Date': 'Thu, 19 Jun 2025 02:52:35 GMT', 'Content-Type': 'application/json', 'Content-Length': '54', 'Connection': 'close'} 
+ body={
+  "age": 20,
+  "id": 67,
+  "name": "\u5f20\u4e09"
+}
+ 
+ </msg>
+<msg time="2025-06-19T10:52:35.704082" level="INFO">${response} = &lt;Response [201]&gt;</msg>
+<var>${response}</var>
+<arg>flask</arg>
+<arg>/user</arg>
+<arg>json=${data}</arg>
+<arg>headers=${headers}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.684891" elapsed="0.019191"/>
+</kw>
+<kw name="Status Should Be" owner="RequestsLibrary">
+<arg>201</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.704082" elapsed="0.000000"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-06-19T10:52:35.704082" level="INFO">${json} = {'age': 20, 'id': 67, 'name': '张三'}</msg>
+<var>${json}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.704082" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${json['id']}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.706252" elapsed="0.000000"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2025-06-19T10:52:35.707320" level="INFO">${USER_ID} = 67</msg>
+<arg>${USER_ID}</arg>
+<arg>${json['id']}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.706990" elapsed="0.000330"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<arg>${json['name']}</arg>
+<arg>张三</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.707320" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<msg time="2025-06-19T10:52:35.707320" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${json['age']}</arg>
+<arg>20</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.707320" elapsed="0.000000"/>
+</kw>
+<doc>测试POST /user接口</doc>
+<status status="PASS" start="2025-06-19T10:52:35.684891" elapsed="0.025566"/>
+</test>
+<test id="s1-t2" name="测试获取单个用户" line="24">
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2025-06-19T10:52:35.710956" level="INFO">GET Request : url=http://127.0.0.1:5000/user/67 
+ path_url=/user/67 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2025-06-19T10:52:35.710956" level="INFO">GET Response : url=http://127.0.0.1:5000/user/67 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.3 Python/3.12.6', 'Date': 'Thu, 19 Jun 2025 02:52:35 GMT', 'Content-Type': 'application/json', 'Content-Length': '54', 'Connection': 'close'} 
+ body={
+  "age": 20,
+  "id": 67,
+  "name": "\u5f20\u4e09"
+}
+ 
+ </msg>
+<msg time="2025-06-19T10:52:35.710956" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>flask</arg>
+<arg>/user/${USER_ID}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.710956" elapsed="0.000000"/>
+</kw>
+<kw name="Status Should Be" owner="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.710956" elapsed="0.000000"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-06-19T10:52:35.710956" level="INFO">${json} = {'age': 20, 'id': 67, 'name': '张三'}</msg>
+<var>${json}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.710956" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${json['name']}</arg>
+<arg>张三</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.710956" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${json['age']}</arg>
+<arg>${20}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.710956" elapsed="0.000000"/>
+</kw>
+<doc>测试GET /user/{id}接口</doc>
+<status status="PASS" start="2025-06-19T10:52:35.710956" elapsed="0.000000"/>
+</test>
+<test id="s1-t3" name="测试获取用户列表" line="32">
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2025-06-19T10:52:35.718960" level="INFO">GET Request : url=http://127.0.0.1:5000/users 
+ path_url=/users 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2025-06-19T10:52:35.718960" level="INFO">GET Response : url=http://127.0.0.1:5000/users 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.3 Python/3.12.6', 'Date': 'Thu, 19 Jun 2025 02:52:35 GMT', 'Content-Type': 'application/json', 'Content-Length': '1128', 'Connection': 'close'} 
+ body=[
+  {
+    "age": 111,
+    "id": 5,
+    "name": "\u793c\u7269"
+  },
+  {
+    "age": 1,
+    "id": 23,
+    "name": "1"
+  },
+  {
+    "age": 20,
+    "id": 52,
+    "name": "\u5f20\u4e09"
+  },
+  {
+    "age": 20,
+    "id": 53,
+    "name": "\u5f20\u4e09"
+  },
+  {
+    "age": 20,
+    "id": 54,
+    "name": "\u5f20\u4e09"
+  },
+  {
+    "age": 20,
+    "id": 55,
+    "name": "1"
+  },
+  {
+    "age": 20,
+    "id": 56,
+    "name": "1"
+  },
+  {
+    "age": 20,
+    "id": 57,
+    "name": "\u5f20\u4e09"
+  },
+  {
+    "age": 20,
+    "id": 58,
+    "name": "1"
+  },
+  {
+    "age": 20,
+    "id": 59,
+    "name": "\u5f20\u4e09"
+  },
+  {
+    "age": 20,
+    "id": 60,
+    "name": "\u5f20\u4e09"
+  },
+  {
+    "age": 20,
+    "id": 61,
+    "name": "\u5f20\u4e09"
+  },
+  {
+    "age": 20,
+    "id": 62,
+    "name": "\u5f20\u4e09"
+  },
+  {
+    "age": 20,
+    "id": 63,
+    "name": "\u5f20\u4e09"
+  },
+  {
+    "age": 20,
+    "id": 64,
+    "name": "\u5f20\u4e09"
+  },
+  {
+    "age": 20,
+    "id": 65,
+    "name": "\u5f20\u4e09"
+  },
+  {
+    "age": 20,
+    "id": 66,
+    "name": "\u5f20\u4e09"
+  },
+  {
+    "age": 20,
+    "id": 67,
+    "name": "\u5f20\u4e09"
+  }
+]
+ 
+ </msg>
+<msg time="2025-06-19T10:52:35.718960" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>flask</arg>
+<arg>/users</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.718960" elapsed="0.000000"/>
+</kw>
+<kw name="Status Should Be" owner="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.718960" elapsed="0.000000"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-06-19T10:52:35.718960" level="INFO">${json} = [{'age': 111, 'id': 5, 'name': '礼物'}, {'age': 1, 'id': 23, 'name': '1'}, {'age': 20, 'id': 52, 'name': '张三'}, {'age': 20, 'id': 53, 'name': '张三'}, {'age': 20, 'id': 54, 'name': '张三'}, {'age': 20, 'id'...</msg>
+<var>${json}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.718960" elapsed="0.000000"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-06-19T10:52:35.725935" level="INFO">用户列表响应: [{'age': 111, 'id': 5, 'name': '礼物'}, {'age': 1, 'id': 23, 'name': '1'}, {'age': 20, 'id': 52, 'name': '张三'}, {'age': 20, 'id': 53, 'name': '张三'}, {'age': 20, 'id': 54, 'name': '张三'}, {'age': 20, 'id': 55, 'name': '1'}, {'age': 20, 'id': 56, 'name': '1'}, {'age': 20, 'id': 57, 'name': '张三'}, {'age': 20, 'id': 58, 'name': '1'}, {'age': 20, 'id': 59, 'name': '张三'}, {'age': 20, 'id': 60, 'name': '张三'}, {'age': 20, 'id': 61, 'name': '张三'}, {'age': 20, 'id': 62, 'name': '张三'}, {'age': 20, 'id': 63, 'name': '张三'}, {'age': 20, 'id': 64, 'name': '张三'}, {'age': 20, 'id': 65, 'name': '张三'}, {'age': 20, 'id': 66, 'name': '张三'}, {'age': 20, 'id': 67, 'name': '张三'}]</msg>
+<arg>用户列表响应: ${json}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.725479" elapsed="0.000456"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${USER_ID} in [user['id'] for user in ${json}]</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.725935" elapsed="0.000000"/>
+</kw>
+<doc>测试GET /users接口</doc>
+<status status="PASS" start="2025-06-19T10:52:35.710956" elapsed="0.014979"/>
+</test>
+<test id="s1-t4" name="测试更新用户" line="40">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-06-19T10:52:35.729764" level="INFO">&amp;{headers} = { Content-Type=application/json }</msg>
+<var>&amp;{headers}</var>
+<arg>Content-Type=${CONTENT_TYPE}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.728395" elapsed="0.001369"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-06-19T10:52:35.729764" level="INFO">&amp;{data} = { name=李四 | age=22 }</msg>
+<var>&amp;{data}</var>
+<arg>name=李四</arg>
+<arg>age=22</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.729764" elapsed="0.000000"/>
+</kw>
+<kw name="PUT On Session" owner="RequestsLibrary">
+<msg time="2025-06-19T10:52:35.747476" level="INFO">PUT Request : url=http://127.0.0.1:5000/user/67 
+ path_url=/user/67 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '37'} 
+ body=b'{"name": "\\u674e\\u56db", "age": "22"}' 
+ </msg>
+<msg time="2025-06-19T10:52:35.747476" level="INFO">PUT Response : url=http://127.0.0.1:5000/user/67 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.3 Python/3.12.6', 'Date': 'Thu, 19 Jun 2025 02:52:35 GMT', 'Content-Type': 'application/json', 'Content-Length': '54', 'Connection': 'close'} 
+ body={
+  "age": 22,
+  "id": 67,
+  "name": "\u674e\u56db"
+}
+ 
+ </msg>
+<msg time="2025-06-19T10:52:35.747476" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>flask</arg>
+<arg>/user/${USER_ID}</arg>
+<arg>json=${data}</arg>
+<arg>headers=${headers}</arg>
+<doc>Sends a PUT request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.729764" elapsed="0.017712"/>
+</kw>
+<kw name="Status Should Be" owner="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.748074" elapsed="0.000000"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-06-19T10:52:35.748074" level="INFO">${json} = {'age': 22, 'id': 67, 'name': '李四'}</msg>
+<var>${json}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.748074" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${json['name']}</arg>
+<arg>李四</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.749435" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${json['age']}</arg>
+<arg>${22}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.750044" elapsed="0.000000"/>
+</kw>
+<doc>测试PUT /user/{id}接口</doc>
+<status status="PASS" start="2025-06-19T10:52:35.727594" elapsed="0.023163"/>
+</test>
+<test id="s1-t5" name="测试删除用户" line="50">
+<kw name="DELETE On Session" owner="RequestsLibrary">
+<msg time="2025-06-19T10:52:35.760739" level="INFO">DELETE Request : url=http://127.0.0.1:5000/user/67 
+ path_url=/user/67 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2025-06-19T10:52:35.766511" level="INFO">DELETE Response : url=http://127.0.0.1:5000/user/67 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.3 Python/3.12.6', 'Date': 'Thu, 19 Jun 2025 02:52:35 GMT', 'Content-Type': 'application/json', 'Content-Length': '44', 'Connection': 'close'} 
+ body={
+  "id": 67,
+  "message": "User deleted"
+}
+ 
+ </msg>
+<msg time="2025-06-19T10:52:35.766511" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>flask</arg>
+<arg>/user/${USER_ID}</arg>
+<doc>Sends a DELETE request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.751319" elapsed="0.015192"/>
+</kw>
+<kw name="Status Should Be" owner="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.766511" elapsed="0.000582"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-06-19T10:52:35.767093" level="INFO">${json} = {'id': 67, 'message': 'User deleted'}</msg>
+<var>${json}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.767093" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${json['message']}</arg>
+<arg>User deleted</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.767093" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${json['id']}</arg>
+<arg>${USER_ID}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2025-06-19T10:52:35.767093" elapsed="0.000000"/>
+</kw>
+<doc>测试DELETE /user/{id}接口</doc>
+<status status="PASS" start="2025-06-19T10:52:35.751319" elapsed="0.015774"/>
+</test>
+<doc>API测试自动化 - 用户管理系统测试</doc>
+<status status="PASS" start="2025-06-19T10:52:35.315875" elapsed="0.451218"/>
+</suite>
+<statistics>
+<total>
+<stat pass="5" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Test Api Robot" id="s1" pass="5" fail="0" skip="0">Test Api Robot</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
